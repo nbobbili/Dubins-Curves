@@ -8,8 +8,6 @@ if (CMAKE_COMPILER_IS_GNUCC)
   endif()
 endif()
 
-add_subdirectory(3rd_party/google-test)
-
 add_library(dubins 
     src/dubins.c)
 
@@ -22,22 +20,33 @@ target_link_libraries(dubins
     m)
 target_link_libraries(dubins PRIVATE --coverage)
 
+add_executable(main 
+    src/main
+)
+
+target_link_libraries(main
+    PRIVATE
+    dubins
+)
+
 if (MSVC)
     target_compile_options(dubins PRIVATE /W3)
 else()
     target_compile_options(dubins PRIVATE -Wall -Wextra -Wpedantic -std=gnu89)
 endif()
 
-enable_testing()
+if(BUILD_TESTING)
+    enable_testing()
 
-add_executable(unittest_dubins
-    tests/montecarlo_tests.cpp
-    tests/stableapi_tests.cpp)
+    add_executable(unittest_dubins
+        tests/montecarlo_tests.cpp
+        tests/stableapi_tests.cpp)
 
-target_link_libraries(unittest_dubins
-    dubins
-    GTest::Main
-    GTest::GTest)
-target_link_libraries(unittest_dubins --coverage)
+    target_link_libraries(unittest_dubins
+        dubins
+        GTest::Main
+        GTest::GTest)
+    target_link_libraries(unittest_dubins --coverage)
 
-add_test(unittest_dubins unittest_dubins)
+    add_test(unittest_dubins unittest_dubins)
+endif(BUILD_TESTING)
