@@ -72,7 +72,7 @@ void GetPath::writeToCsv() {
 }
 
 int main() {
-    double q0[] = {0, 0, 0};
+    double q0[] = {0, 0, 0};  // {x, y, theta}
     double q1[] = {320.123, -453.453, 2.124};
     double turning_radius = 60;
     double init_height = 45.0;
